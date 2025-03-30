@@ -6,6 +6,11 @@ func part1(){       // 15 min
     let floatVar: Float = 10.5
     let doubleVar: Double = 10.5
     let _: String = "Hello, World!"
+    
+    print(Int.max, Int.min)
+    print(UInt.max, UInt.min)
+    print(Double.greatestFiniteMagnitude, Double.leastNormalMagnitude)
+    print(Float.greatestFiniteMagnitude, Float.leastNormalMagnitude)
 
     typealias Product = (name: String, number: Int)
     let _: Product = ("Apple", 2)
@@ -22,6 +27,10 @@ func part1(){       // 15 min
     print("dec", a-b)
     print("mul", a*b)
     print("del", a/b)
+    
+    let str = String(readLine() ?? "incorrect input")
+    print(str)
+    
 }
 
 func part2(){       // 8 min
@@ -40,6 +49,12 @@ func part2(){       // 8 min
         print(char)
     }
     
+    let str = """
+            Name: \(surname) \(name)
+            Age: \(age)
+            City: \(city)
+            """
+    print(str)
 }
 
 func part2pro(){        // 22 min
@@ -55,7 +70,7 @@ func part2pro(){        // 22 min
     print("input city: ")
     let city: String = readLine()!
     print("input country: ")
-    let country: String = readLine()!
+    let country: String = readLine() ?? "unknown"
     
     var check: Bool = false
     for pair in [pair1, pair2, pair3, pair4, pair5] {
@@ -126,7 +141,141 @@ func part3(){       // 15 min
     print(sum)
 }
 
-//part1()
-//part2()
-//part2pro()
-//part3()
+
+func quickSort(arr: [Int]) -> [Int] {
+    if arr.count < 2 {
+        return arr
+    }
+    let pivot = arr[arr.count / 2]
+    let less = arr.filter { $0 < pivot }    // ? $0
+    let equal = arr.filter { $0 == pivot }  // ? $0
+    let greater = arr.filter { $0 > pivot } // ? $0
+    return quickSort(arr: greater) + equal + quickSort(arr: less)
+}
+
+func part3pro(){        // 1h 30 min
+    
+    let str1 = "Belarus"
+    let str2 = "Russia"
+    let str3 = "Poland"
+    let str4 = "Latvia"
+    let str5 = "USA"
+    let str6 = "Spain"
+    let str7 = "Italy"
+    let str8 = "Germany"
+    let str9 = "Austria"
+    let str10 = "Kazakhstan"
+    let arr1: [String] = [str1, str2, str3, str4, str5, str6, str7, str8, str9, str10]
+    
+    var arr2: [String] = []
+    
+    for country in arr1 {
+        if country.count > 5 {
+            let newStr = country.replacingOccurrences(of: "A", with: "Q")
+            arr2.append(newStr.replacingOccurrences(of: "a", with: "q"))
+        }
+    }
+    print(arr2)
+    
+    
+    var numbers: [Int] = []
+    for _ in 0...29 {
+        numbers.append(Int.random(in: -20...20))
+    }
+    print(numbers)
+
+    
+    var numbersLinear = numbers
+    for i in 0..<30 {
+        var maxValue = numbersLinear[i]
+        var maxIndex = i
+        for j in i+1..<30 {
+            if numbersLinear[j] > maxValue {
+                maxIndex = j
+                maxValue = numbersLinear[j]
+            }
+        }
+        let temp = numbersLinear[i]
+        numbersLinear[i] = numbersLinear[maxIndex]
+        numbersLinear[maxIndex] = temp
+    }
+    print(numbersLinear)
+    
+    
+    var numbersBubble = numbers
+    for _ in 0...29 {
+        for i in 0..<29 {
+            if numbersBubble[i+1] > numbersBubble[i] {
+                let temp = numbersBubble[i+1]
+                numbersBubble[i+1] = numbersBubble[i]
+                numbersBubble[i] = temp
+            }
+        }
+    }
+    print(numbersBubble)
+    
+    
+    var numbersQuick = numbers
+    numbersQuick = quickSort(arr: numbersQuick)
+    print(numbersQuick)
+    
+
+    var numbersShake = numbers
+    var left = 0
+    var right = numbersShake.count - 1
+    var hasSwaps = true
+    while hasSwaps {
+        hasSwaps = false
+
+        for i in left..<right {
+            if numbersShake[i] < numbersShake[i + 1] {
+                numbersShake.swapAt(i, i + 1)
+                hasSwaps = true
+            }
+        }
+        right -= 1
+        for i in stride(from: right, to: left, by: -1) {
+            if numbersShake[i] > numbersShake[i - 1] {
+                numbersShake.swapAt(i, i - 1)
+                hasSwaps = true
+            }
+        }
+        left += 1
+    
+    }
+    print(numbersShake)
+    
+    
+    var numbersOddEven = numbers
+    var sorted: Bool = false
+    while !sorted {
+        sorted = true
+        for i in stride(from: 0, to: numbersOddEven.count - 1, by: 2) {
+            if numbersOddEven[i+1] > numbersOddEven[i] {
+                let temp = numbersOddEven[i+1]
+                numbersOddEven[i+1] = numbersOddEven[i]
+                numbersOddEven[i] = temp
+                sorted = false
+            }
+        }
+        for i in stride(from: 1, to: numbersOddEven.count - 1, by: 2) {
+            if numbersOddEven[i+1] > numbersOddEven[i] {
+                let temp = numbersOddEven[i+1]
+                numbersOddEven[i+1] = numbersOddEven[i]
+                numbersOddEven[i] = temp
+                sorted = false
+            }
+        }
+    }
+    print(numbersOddEven)
+    
+    
+    print("if numbersLinear == numbersBubble == numbersQuick == numbersShake == numbersOddEven ? : " + (numbersLinear == numbersBubble && numbersBubble == numbersQuick && numbersQuick == numbersShake && numbersShake == numbersOddEven ? "true" : "false"))
+}
+
+
+part1()
+part2()
+part2pro()
+part3()
+part3pro()
